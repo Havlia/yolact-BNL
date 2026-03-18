@@ -658,8 +658,15 @@ def evalvideo(net:Yolact, path:str, out_path:str=None):
     else:
         num_frames = round(vid.get(cv2.CAP_PROP_FRAME_COUNT))
 
-    net = CustomDataParallel(net).cuda()
-    transform = torch.nn.DataParallel(FastBaseTransform()).cuda()
+    use_cuda = args.cuda and torch.cuda.is_available()
+
+    if use_cuda:
+        net = net.cpu()
+        transform = torch.nn.DataParallel(FastBaseTransform()).cuda()
+    else:
+        net = net.cpu()
+        transform = FastBaseTransform()
+
     frame_times = MovingAverage(100)
     fps = 0
     frame_time_target = 1 / target_fps
@@ -691,7 +698,11 @@ def evalvideo(net:Yolact, path:str, out_path:str=None):
 
     def transform_frame(frames):
         with torch.no_grad():
-            frames = [torch.from_numpy(frame).cuda().float() for frame in frames]
+            if use_cuda:
+
+                frames = [torch.from_numpy(frame).cuda().float() for frame in frames]
+            else: 
+                frames = [torch.from_numpy(frame).float() for frame in frames]
             return frames, transform(torch.stack(frames, 0))
 
     def eval_network(inp):
