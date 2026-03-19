@@ -1,14 +1,14 @@
-from data import COCODetection, get_label_map, MEANS, COLORS
-from yolact import Yolact
-from utils.augmentations import BaseTransform, FastBaseTransform, Resize
-from utils.functions import MovingAverage, ProgressBar
-from layers.box_utils import jaccard, center_size, mask_iou
-from utils import timer
-from utils.functions import SavePath
-from layers.output_utils import postprocess, undo_image_transformation
+from yolact_submodule.data import COCODetection, get_label_map, MEANS, COLORS
+from yolact_submodule.yolact import Yolact
+from yolact_submodule.utils.augmentations import BaseTransform, FastBaseTransform, Resize
+from yolact_submodule.utils.functions import MovingAverage, ProgressBar
+from yolact_submodule.layers.box_utils import jaccard, center_size, mask_iou
+from yolact_submodule.utils import timer
+from yolact_submodule.utils.functions import SavePath
+from yolact_submodule.layers.output_utils import postprocess, undo_image_transformation
 import pycocotools
 
-from data import cfg, set_cfg, set_dataset
+from yolact_submodule.data import cfg, set_cfg, set_dataset
 
 import numpy as np
 import torch
